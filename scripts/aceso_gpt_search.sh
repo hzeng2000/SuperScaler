@@ -88,9 +88,12 @@ elif [ "$exp_setting" == "large" ]; then
     max_num_hops=7
     init_config=balance
 
-    model_sizes=("1_3B" "2_6B" "6_7B" "13B")
-    num_nodes_list=(1 1 2 4)
-    gpus_per_node_list=(4 8 8 8)
+    # model_sizes=("1_3B" "2_6B" "6_7B" "13B")
+    # num_nodes_list=(1 1 2 4)
+    # gpus_per_node_list=(4 8 8 8)
+    model_sizes=("13B")
+    num_nodes_list=(2)
+    gpus_per_node_list=(8)
 
     for ((index=0; index<4; index=index+1))
     do

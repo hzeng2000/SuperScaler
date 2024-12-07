@@ -65,15 +65,15 @@ elif [ "$exp_setting" == "large" ]; then
     RESULT_PATH=${ROOT_PATH}/logs-large/aceso/
 
     ## 1node (4GPUs and 8GPUs)
-    bash scripts/run_${model_name}_1node.sh
+    # bash scripts/run_${model_name}_1node.sh
 
     ## 2nodes
     parallel-ssh -i -t 0 -h pssh-2workers.host "ps -aux | grep 'pretrain' | grep -v grep | awk '{print \$2}' | xargs kill -9"
     parallel-ssh -i -t 0 -h pssh-2workers.host "cd $ROOT_PATH/runtime && bash scripts/run_${model_name}_2nodes.sh"
 
     ## 4nodes
-    parallel-ssh -i -t 0 -h pssh-4workers.host "ps -aux | grep 'pretrain' | grep -v grep | awk '{print \$2}' | xargs kill -9"
-    parallel-ssh -i -t 0 -h pssh-4workers.host "cd $ROOT_PATH/runtime && bash scripts/run_${model_name}_4nodes.sh"
+    # parallel-ssh -i -t 0 -h pssh-4workers.host "ps -aux | grep 'pretrain' | grep -v grep | awk '{print \$2}' | xargs kill -9"
+    # parallel-ssh -i -t 0 -h pssh-4workers.host "cd $ROOT_PATH/runtime && bash scripts/run_${model_name}_4nodes.sh"
 
 elif [ "$exp_setting" == "scale" ]; then
 

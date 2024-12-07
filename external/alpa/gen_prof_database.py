@@ -10,11 +10,41 @@ python3 gen_prof_database.py --efa --max-comm-size-intra-node 33 --max-comm-size
 
 import ray
 import argparse
+import subprocess
 
 import jax
 from alpa import DeviceCluster, ProfilingResultDatabase, global_config
 from alpa.util import run_cmd
 
+
+@ray.remote
+def setup_spack_environment():
+    # Set up Spack's shell support
+    setup_env_cmd = ". /WORK/PUBLIC/zhaijd_work/spack/share/spack/setup-env.sh"
+    try:
+        subprocess.run(setup_env_cmd, shell=True, check=True)
+        print("Spack environment setup successfully.")
+    except subprocess.CalledProcessError as e:
+        print(f"Failed to set up Spack environment: {e}")
+        raise
+
+    # Load the desired CUDA version using Spack
+    spack_load_cmd = "spack load cuda@11.6"
+    try:
+        subprocess.run(spack_load_cmd, shell=True, check=True)
+        print("Spack cuda loaded successfully.")
+    except subprocess.CalledProcessError as e:
+        print(f"Failed to load cuda: {e}")
+        raise
+
+def load_spack_environment():
+    # Get the list of nodes in the Ray cluster
+    nodes = ray.nodes()
+    node_ids = [node["NodeID"] for node in nodes if node["Alive"]]
+
+    # Run the setup_spack_environment function on each node
+    ray.get([setup_spack_environment.options(resources={f"node:{node_id}": 1}).remote() for node_id in node_ids])
+    
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
     parser.add_argument("--cluster-key", type=str, default="default")
@@ -49,6 +79,7 @@ if __name__ == "__main__":
 
     # Connect to a ray cluster
     ray.init(address="auto")
+    # load_spack_environment()
     cluster = DeviceCluster()
 
     prof_database = cluster.profile_all(

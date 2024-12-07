@@ -2,7 +2,8 @@
 ###### 8GPUs * 2nodes ######
 #### Model info ####
 model_name=gpt
-model_size=6_7B
+# model_size=6_7B
+model_size=13B
 
 #### Hardware info ####
 NNODES=2
@@ -11,8 +12,10 @@ WORLD_SIZE=$(($GPUS_PER_NODE*$NNODES))
 
 #### Distributed info ####
 ## Modify this for distributed training
-NODE_RANK=0
-MASTER_ADDR=localhost
+NODE_RANK=$1
+# MASTER_ADDR=localhost
+# g09
+MASTER_ADDR=11.11.3.3
 MASTER_PORT=7000
 DISTRIBUTED_ARGS="--nproc_per_node $GPUS_PER_NODE --nnodes $NNODES --node_rank $NODE_RANK --master_addr $MASTER_ADDR --master_port $MASTER_PORT"
 
@@ -26,9 +29,9 @@ for file_name in $(ls $CONFIG_SAVE_PATH)
 do
 config_name=`basename $file_name .json`
 CURRENT_TIME=$(date '+%Y-%m-%d-%H-%M-%S')
-echo "[LOG][RUNTIME]($CURRENT_TIME) start executing cofnig: $config_name ." >> ${RESULT_PATH}full_log.log
+echo "[LOG][RUNTIME]($CURRENT_TIME) start executing config: $config_name ." >> ${RESULT_PATH}full_log.log
 
-python3 -m torch.distributed.launch $DISTRIBUTED_ARGS \
+torchrun $DISTRIBUTED_ARGS \
        pretrain_gpt.py \
        --flexpipe-config $CONFIG_SAVE_PATH${file_name} \
        --train-iters 3 \
@@ -58,7 +61,7 @@ echo "[LOG][RUNTIME]($CURRENT_TIME) end executing config: $config_name ." >> ${R
 ## we use a parallel-ssh command following the normal execution, when some node fails due to OOM, it will 
 ## kill the tasks in all the other nodes.
 ## To use this, prepare a pssh-2workers.host or pssh-4workers.host, which contains the host name or IP addresses of other nodes.
-parallel-ssh -i -t 0 -h pssh-${NNODES}workers.host "ps -aux | grep 'pretrain' | grep -v grep | awk '{print \$2}' | xargs kill -9"
+# parallel-ssh -i -t 0 -h pssh-${NNODES}workers.host "ps -aux | grep 'pretrain' | grep -v grep | awk '{print \$2}' | xargs kill -9"
 sleep 10s 
 
 done 

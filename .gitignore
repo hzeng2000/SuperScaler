@@ -1,0 +1,13 @@
+*.pyc
+external
+external/*
+logs/*
+logs-large/*
+*.pkl
+Megatron-LM
+*.so
+*.ninja_log
+*.o
+*.ninja
+*.ninja_deps
+external/alpa/prof_database.pkl

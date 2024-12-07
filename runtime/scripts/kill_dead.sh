@@ -1,0 +1,1 @@
+ps -aux | grep 'pretrain' | grep -v grep | awk '{print $2}'

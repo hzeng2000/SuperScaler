@@ -28,7 +28,7 @@ for file_name in $(ls $CONFIG_SAVE_PATH)
 do
 config_name=`basename $file_name .json`
 CURRENT_TIME=$(date '+%Y-%m-%d-%H-%M-%S')
-echo "[LOG][RUNTIME]($CURRENT_TIME) start executing cofnig: $config_name ." >> ${RESULT_PATH}full_log.log
+echo "[LOG][RUNTIME]($CURRENT_TIME) start executing config: $config_name ." >> ${RESULT_PATH}full_log.log
 
 python3 -m torch.distributed.launch $DISTRIBUTED_ARGS \
        pretrain_gpt.py \

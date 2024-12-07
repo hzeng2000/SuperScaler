@@ -187,6 +187,7 @@ def initialize_model_parallel_flexpipe():
     global _MPU_PIPELINE_MODEL_PARALLEL_RANK
     ranks_in_each_pipe_stage = []
     start_rank = 0
+    print(f'pipeline_model_parallel_size {pipeline_model_parallel_size}')
     for i in range(pipeline_model_parallel_size):
         STAGE_TP_SIZE = _TP_SIZE_PER_OP[_OPS_START_INDEX_LIST[i]]
         STAGE_DP_SIZE = _DP_SIZE_PER_OP[_OPS_START_INDEX_LIST[i]]
@@ -194,6 +195,7 @@ def initialize_model_parallel_flexpipe():
         ranks = [j for j in range(start_rank, end_rank)]
         if rank in ranks:
             _MPU_PIPELINE_MODEL_PARALLEL_RANK = i
+            print(f'rank {rank} is in stage {i}, with ranks {ranks}')
         ranks_in_each_pipe_stage.append(ranks)
         start_rank = end_rank
 

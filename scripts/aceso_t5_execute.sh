@@ -32,7 +32,7 @@ if [ "$exp_setting" == "small" ]; then
     do
     config_name=`basename $file_name .json`
     CURRENT_TIME=$(date '+%Y-%m-%d-%H-%M-%S')
-    echo "[LOG][RUNTIME]($(date '+%Y-%m-%d-%H-%M-%S')) start executing cofnig: $config_name ." >> ${RESULT_PATH}full_log.log
+    echo "[LOG][RUNTIME]($(date '+%Y-%m-%d-%H-%M-%S')) start executing config: $config_name ." >> ${RESULT_PATH}full_log.log
 
     python3 -m torch.distributed.launch $DISTRIBUTED_ARGS \
         pretrain_t5.py \
@@ -58,7 +58,7 @@ if [ "$exp_setting" == "small" ]; then
         --log-path $LOG_PATH \
         2>&1 | tee ${LOG_PATH}full_log_${config_name}_rank${NODE_RANK}_${CURRENT_TIME}
 
-    echo "[LOG][RUNTIME]($(date '+%Y-%m-%d-%H-%M-%S')) end executing cofnig: $config_name ." >> ${RESULT_PATH}full_log.log
+    echo "[LOG][RUNTIME]($(date '+%Y-%m-%d-%H-%M-%S')) end executing config: $config_name ." >> ${RESULT_PATH}full_log.log
 
     done 
 

@@ -1,14 +1,19 @@
 #! /bin/bash
-MASTER_ADDR=localhost
+# MASTER_ADDR=localhost
+# g09
+MASTER_ADDR=11.11.3.3
 MASTER_PORT=7000
-NNODES=4
-NODE_RANK=0
+# NNODES=2
+# MAX_NUM_GPUS=16
+NNODES=1
+MAX_NUM_GPUS=8
+NODE_RANK=$1
 
 RUNTIME_PATH=$(pwd)/
 PROFILING_PATH=${RUNTIME_PATH}profiled-time-eurosys-new/
 
 mkdir ${PROFILING_PATH}
-MAX_NUM_GPUS=8
+
 MODEL_NAME=gpt
 MODEL_SIZE=all
 
@@ -19,7 +24,7 @@ DISTRIBUTED_ARGS="--nproc_per_node $GPUS_PER_NODE --nnodes $NNODES --node_rank $
 
 echo [TIME] before profiling tp_size $tp_size : $(date '+%Y-%m-%d-%H-%M-%S') >> ${PROFILING_PATH}profiling_${MODEL_NAME}.log
 
-python3 -m torch.distributed.launch $DISTRIBUTED_ARGS \
+torchrun $DISTRIBUTED_ARGS \
     op_profiler.py \
     --prof-tp-size $tp_size \
     --prof-path $PROFILING_PATH \

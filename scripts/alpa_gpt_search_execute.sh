@@ -46,11 +46,12 @@ run_experiment () {
 if [ "$exp_setting" == "small" ]; then
   run_experiment 1 4 ae_small 1_3B
 elif [ "$exp_setting" == "large" ]; then
-  run_experiment 4 8 ae_large 13B
-  run_experiment 2 8 ae_large 6_7B
-  run_experiment 1 8 ae_large 2_6B
-  run_experiment 1 4 ae_large 1_3B
-  run_experiment 1 1 ae_large 350M
+  run_experiment 2 8 ae_large 13B
+  # run_experiment 4 8 ae_large 13B
+  # run_experiment 2 8 ae_large 6_7B
+  # run_experiment 1 8 ae_large 2_6B
+  # run_experiment 1 4 ae_large 1_3B
+  # run_experiment 1 1 ae_large 350M
 elif [ "$exp_setting" == "scale" ]; then
   run_experiment 1 8 ae_scale_8 8layers
   run_experiment 1 8 ae_scale_16 16layers
